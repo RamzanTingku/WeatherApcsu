@@ -247,7 +247,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp">
 
-                <include layout="@layout/hourly_weather_row" />
+                <include layout="@layout/hour_update_list" />
 
             </LinearLayout>
 

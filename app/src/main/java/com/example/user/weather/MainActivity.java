@@ -9,8 +9,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.weather.HourlyUpdate.HourAdapter;
+import com.example.user.weather.HourlyUpdate.HourUpdate;
 import com.example.user.weather.activities.Log;
 import com.example.user.weather.apcsu.ApiTool;
 import com.example.user.weather.data.CityDml;
@@ -58,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     DayWeatherAdapter dayWeatherAdapter;
     public ArrayList<DayWeather> dayWeathers;
     RecyclerView contactRecyclerView;
-//    String[] hourTempC,hourTempF,hourCondCode,hourCondIcon,hourCondText;
     AlertDialog alertDialog1;
     //CharSequence[] values = {"Celsius","Fahrenheit"};
 
@@ -67,6 +70,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     TextView temp0,temp1,temp2,temp3,temp4,temp5,temp6,temp7,temp8,temp9,temp10,temp11,crntTempUnitT,crntTempRangeUnitT,day0TempUnitT,day1TempUnitT,day2TempUnitT,day3TempUnitT,day4TempUnitT, lastUpdateT,detailsTextT,  minTempt,maxTempt,avgTempt,humidityt,pressuret,visivilityt,uvt,windt,windDirt,wConditiontt,sunriset,sunsett,locationt,timet,feelTmpt,day0t,day0datet,day0hight,day0lowt,
             day1t,day1datet,day1hight,day1lowt,day2t,day2datet,day2hight,day2lowt,day3t,day3datet,day3hight,day3lowt,day4t,day4datet,day4hight,day4lowt;
 
+    String[] hour = new String[25];
+    String[] hourTempC = new String[25];
+    String[] hourTempF = new String[25];
+    String[] hourCondText = new String[25];
+    String[] hourCondIcon = new String[25];
+    String[] hourCondCode = new String[25];
+
+
+    private RecyclerView hourRecyclerview;
+    private ArrayList<HourUpdate>hourUpdates;
+    private HourAdapter hourAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,51 +94,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(false);
 
-        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),
-                R.drawable.setting);
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.setting);
         mToolbar.setOverflowIcon(drawable);
 
 
         getDayStatus();
+        test();
+
+
+
+        hourRecyclerview = (RecyclerView) findViewById(R.id.hour_recyclerview);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
+        hourRecyclerview.setLayoutManager(llm);
+
+
 
 
         //googleService( "school",23.777175,90.399542,1000);
        // googlePid( "v" );
        // yahooLatLong(23.777175,90.399542);
-
-        test();
-
-
-
-
-/*
-
-          dayWeathers=new ArrayList<>();
-        dayWeathers.add(new DayWeather("1:00 am","28*",1));
-        dayWeathers.add(new DayWeather("2:00 am","27*",1));
-        dayWeathers.add(new DayWeather("3:00 am","29*",1));
-        dayWeathers.add(new DayWeather("4:00 am","31*",1));
-        dayWeathers.add(new DayWeather("5:00 am","28*",1));
-        dayWeathers.add(new DayWeather("1:00 am","28*",1));
-        dayWeathers.add(new DayWeather("2:00 am","27*",1));
-        dayWeathers.add(new DayWeather("3:00 am","29*",1));
-        dayWeathers.add(new DayWeather("4:00 am","31*",1));
-        dayWeathers.add(new DayWeather("5:00 am","28*",1));
-
-
-        // TODO-2: Create object of LayoutManager
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        // TODO-3: Create object of ContactRecyclerAdapter //
-        dayWeatherAdapter=new DayWeatherAdapter(this,dayWeathers);
-
-
-        // TODO-4: Setting LayoutManager and Adapter to RecyclerView of activity_main.xml//
-        contactRecyclerView = (RecyclerView) findViewById(R.id.dTimelyWeatherLv);
-        contactRecyclerView.setLayoutManager(llm);
-        contactRecyclerView.setAdapter(dayWeatherAdapter);
-*/
 
 
 
@@ -350,6 +340,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+
+
+
     public void test(){
 
 //
@@ -394,137 +387,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 String feelF = response.body().getCurrent().getFeelslikeC().toString();
 
 
-                 hourTempC0 = response.body().getForecast().getForecastday().get(0).getHour().get(0).getTempC().toString();
-                 hourTempC1 = response.body().getForecast().getForecastday().get(0).getHour().get(1).getTempC().toString();
-                 hourTempC2 = response.body().getForecast().getForecastday().get(0).getHour().get(4).getTempC().toString();
-                 hourTempC3 = response.body().getForecast().getForecastday().get(0).getHour().get(6).getTempC().toString();
-                 hourTempC4 = response.body().getForecast().getForecastday().get(0).getHour().get(8).getTempC().toString();
-                 hourTempC5 = response.body().getForecast().getForecastday().get(0).getHour().get(10).getTempC().toString();
-                 hourTempC6 = response.body().getForecast().getForecastday().get(0).getHour().get(12).getTempC().toString();
-                 hourTempC7 = response.body().getForecast().getForecastday().get(0).getHour().get(14).getTempC().toString();
-                 hourTempC8 = response.body().getForecast().getForecastday().get(0).getHour().get(16).getTempC().toString();
-                 hourTempC9 = response.body().getForecast().getForecastday().get(0).getHour().get(18).getTempC().toString();
-                 hourTempC10 = response.body().getForecast().getForecastday().get(0).getHour().get(20).getTempC().toString();
-                 hourTempC11 = response.body().getForecast().getForecastday().get(0).getHour().get(22).getTempC().toString();
 
-                String hourCondText0 = response.body().getForecast().getForecastday().get(0).getHour().get(0).getCondition().getText().toString();
-                String hourCondText1 = response.body().getForecast().getForecastday().get(0).getHour().get(2).getCondition().getText().toString();
-                String hourCondText2 = response.body().getForecast().getForecastday().get(0).getHour().get(4).getCondition().getText().toString();
-                String hourCondText3 = response.body().getForecast().getForecastday().get(0).getHour().get(6).getCondition().getText().toString();
-                String hourCondText4 = response.body().getForecast().getForecastday().get(0).getHour().get(8).getCondition().getText().toString();
-                String hourCondText5 = response.body().getForecast().getForecastday().get(0).getHour().get(10).getCondition().getText().toString();
-                String hourCondText6 = response.body().getForecast().getForecastday().get(0).getHour().get(12).getCondition().getText().toString();
-                String hourCondText7 = response.body().getForecast().getForecastday().get(0).getHour().get(14).getCondition().getText().toString();
-                String hourCondText8 = response.body().getForecast().getForecastday().get(0).getHour().get(16).getCondition().getText().toString();
-                String hourCondText9 = response.body().getForecast().getForecastday().get(0).getHour().get(18).getCondition().getText().toString();
-                String hourCondText10 = response.body().getForecast().getForecastday().get(0).getHour().get(20).getCondition().getText().toString();
-                String hourCondText11 = response.body().getForecast().getForecastday().get(0).getHour().get(22).getCondition().getText().toString();
+                for (int i = 0; i < 24; i++) {
 
-
-                String hour0 = response.body().getForecast().getForecastday().get(0).getHour().get(0).getTime().substring(11,16).toString();
-                String hour1 = response.body().getForecast().getForecastday().get(0).getHour().get(2).getTime().substring(11,16).toString();
-                String hour2 = response.body().getForecast().getForecastday().get(0).getHour().get(4).getTime().substring(11,16).toString();
-                String hour3 = response.body().getForecast().getForecastday().get(0).getHour().get(6).getTime().substring(11,16).toString();
-                String hour4 = response.body().getForecast().getForecastday().get(0).getHour().get(8).getTime().substring(11,16).toString();
-                String hour5 = response.body().getForecast().getForecastday().get(0).getHour().get(10).getTime().substring(11,16).toString();
-                String hour6 = response.body().getForecast().getForecastday().get(0).getHour().get(12).getTime().substring(11,16).toString();
-                String hour7 = response.body().getForecast().getForecastday().get(0).getHour().get(14).getTime().substring(11,16).toString();
-                String hour8 = response.body().getForecast().getForecastday().get(0).getHour().get(16).getTime().substring(11,16).toString();
-                String hour9 = response.body().getForecast().getForecastday().get(0).getHour().get(18).getTime().substring(11,16).toString();
-                String hour10 = response.body().getForecast().getForecastday().get(0).getHour().get(20).getTime().substring(11,16).toString();
-                String hour11 = response.body().getForecast().getForecastday().get(0).getHour().get(22).getTime().substring(11,16).toString();
-
-
-
-
-               /* for (int i = 1; i < 24; i++) {
+                    hour[i] = response.body().getForecast().getForecastday().get(0).getHour().get(i).getTime().substring(11,16).toString();
                     hourTempC[i] = response.body().getForecast().getForecastday().get(0).getHour().get(i).getTempC().toString();
                     hourTempF[i] = response.body().getForecast().getForecastday().get(0).getHour().get(i).getTempF().toString();
                     hourCondText[i] = response.body().getForecast().getForecastday().get(0).getHour().get(i).getCondition().getText().toString();
                     hourCondIcon[i] = response.body().getForecast().getForecastday().get(0).getHour().get(i).getCondition().getIcon().toString();
                     hourCondCode[i] = response.body().getForecast().getForecastday().get(0).getHour().get(i).getCondition().getCode().toString();
-                    i++;
-                }*/
+                }
 
+                hourUpdates = new ArrayList<>();
 
-                TextView time0 = (TextView) findViewById(R.id.time0);
-                TextView time1 = (TextView) findViewById(R.id.time1);
-                TextView time2 = (TextView) findViewById(R.id.time2);
-                TextView time3 = (TextView) findViewById(R.id.time3);
-                TextView time4 = (TextView) findViewById(R.id.time4);
-                TextView time5 = (TextView) findViewById(R.id.time5);
-                TextView time6 = (TextView) findViewById(R.id.time6);
-                TextView time7 = (TextView) findViewById(R.id.time7);
-                TextView time8 = (TextView) findViewById(R.id.time8);
-                TextView time9 = (TextView) findViewById(R.id.time9);
-                TextView time10 = (TextView) findViewById(R.id.time10);
-                TextView time11 = (TextView) findViewById(R.id.time11);
+                for (int i = 0; i <24 ; i++) {
+                    hourUpdates.add(new HourUpdate(hour[i],hourTempC[i],hourCondText[i]));
+                }
+                hourAdapter = new HourAdapter(MainActivity.this,hourUpdates);
+                hourRecyclerview.setAdapter(hourAdapter);
+                Toast.makeText(MainActivity.this, hourUpdates.get(2).getTime(), Toast.LENGTH_SHORT).show();
 
-                time0.setText(hour0);
-                time1.setText(hour1);
-                time2.setText(hour2);
-                time3.setText(hour3);
-                time4.setText(hour4);
-                time5.setText(hour5);
-                time6.setText(hour6);
-                time7.setText(hour7);
-                time8.setText(hour8);
-                time9.setText(hour9);
-                time10.setText(hour10);
-                time11.setText(hour11);
-
-                TextView cond0 = (TextView) findViewById(R.id.condition0);
-                TextView cond1 = (TextView) findViewById(R.id.condition1);
-                TextView cond2 = (TextView) findViewById(R.id.condition2);
-                TextView cond3 = (TextView) findViewById(R.id.condition3);
-                TextView cond4 = (TextView) findViewById(R.id.condition4);
-                TextView cond5 = (TextView) findViewById(R.id.condition5);
-                TextView cond6 = (TextView) findViewById(R.id.condition6);
-                TextView cond7 = (TextView) findViewById(R.id.condition7);
-                TextView cond8 = (TextView) findViewById(R.id.condition8);
-                TextView cond9 = (TextView) findViewById(R.id.condition9);
-                TextView cond10 = (TextView) findViewById(R.id.condition10);
-                TextView cond11 = (TextView) findViewById(R.id.condition11);
-
-                cond0.setText(hourCondText0);
-                cond1.setText(hourCondText1);
-                cond2.setText(hourCondText2);
-                cond3.setText(hourCondText3);
-                cond4.setText(hourCondText4);
-                cond5.setText(hourCondText5);
-                cond6.setText(hourCondText6);
-                cond7.setText(hourCondText7);
-                cond8.setText(hourCondText8);
-                cond9.setText(hourCondText9);
-                cond10.setText(hourCondText10);
-                cond11.setText(hourCondText11);
-
-
-                 temp0 = (TextView) findViewById(R.id.temp0);
-                 temp1 = (TextView) findViewById(R.id.temp1);
-                 temp2 = (TextView) findViewById(R.id.temp2);
-                 temp3 = (TextView) findViewById(R.id.temp3);
-                 temp4 = (TextView) findViewById(R.id.temp4);
-                 temp5 = (TextView) findViewById(R.id.temp5);
-                 temp6 = (TextView) findViewById(R.id.temp6);
-                 temp7 = (TextView) findViewById(R.id.temp7);
-                 temp8 = (TextView) findViewById(R.id.temp8);
-                 temp9 = (TextView) findViewById(R.id.temp9);
-                 temp10 = (TextView) findViewById(R.id.temp10);
-                 temp11 = (TextView) findViewById(R.id.temp11);
-
-                temp0.setText(hourTempC0);
-                temp1.setText(hourTempC1);
-                temp2.setText(hourTempC2);
-                temp3.setText(hourTempC3);
-                temp4.setText(hourTempC4);
-                temp5.setText(hourTempC5);
-                temp6.setText(hourTempC6);
-                temp7.setText(hourTempC7);
-                temp8.setText(hourTempC8);
-                temp9.setText(hourTempC9);
-                temp10.setText(hourTempC10);
-                temp11.setText(hourTempC11);
 
 
 
@@ -589,6 +471,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     }
+
+
+
 
 
     public void editLocation(View view) {
