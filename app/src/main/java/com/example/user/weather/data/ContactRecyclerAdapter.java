@@ -36,7 +36,7 @@ public class ContactRecyclerAdapter extends RecyclerView.Adapter<ContactRecycler
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View v = inflater.inflate(R.layout.hourly_weather_row,parent,false);
+        View v = inflater.inflate(R.layout.not_used_hourly_weather_row,parent,false);
         return new ContactViewHolder(v);
     }
 
